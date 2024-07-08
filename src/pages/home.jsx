@@ -9,7 +9,7 @@ import Button from "../components/ui/button";
 
 export default function Home() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [user, setUser] = useState(true);
+  const [user, setUser] = useState(false);
   return (
     <div className="flex">
       <div
@@ -61,14 +61,19 @@ export default function Home() {
           </div>
 
           {/* user avatar or login  */}
-          <Link to={"/auth"}>
-            <Button
-              text="Login"
-              customClass="bg-white text-black hover:bg-gray-300 transition-all duration-300"
-            />
-          </Link>
+          {user ? (
+            <div> Avatar </div>
+          ) : (
+            <Link to={"/auth"}>
+              <Button
+                text="Login"
+                customClass="bg-white text-black hover:bg-gray-300 transition-all duration-300 text-sm w-20"
+              />
+            </Link>
+          )}
         </div>
 
+        {/* all projects  */}
         <div>{user ? "" : ""}</div>
       </div>
     </div>
