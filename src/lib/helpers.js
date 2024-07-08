@@ -1,10 +1,10 @@
 import {
   GoogleAuthProvider,
+  GithubAuthProvider,
   signInWithPopup,
   signInWithRedirect,
 } from "firebase/auth";
 import { auth } from "../config/firebase";
-import { GithubAuthProvider } from "firebase/auth/web-extension";
 
 const googleAuthProvider = new GoogleAuthProvider();
 const githubAuthProvider = new GithubAuthProvider();

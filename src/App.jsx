@@ -6,6 +6,7 @@ import Projects from "./pages/projects";
 import Auth from "./pages/auth";
 import { useEffect } from "react";
 import { auth } from "./config/firebase";
+import { Toaster } from "sonner";
 
 function App() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ function App() {
 
   return (
     <div className="bg-white dark:bg-[#141417] min-h-screen text-white">
+      <Toaster richColors />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/project" element={<NewProject />} />

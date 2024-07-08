@@ -2,11 +2,18 @@ import { useState } from "react";
 import { LuEyeOff, LuEye } from "react-icons/lu";
 import { motion } from "framer-motion";
 
-export default function Input({ label, placeholder, type, Icon, setState }) {
+export default function Input({
+  label,
+  placeholder,
+  type,
+  Icon,
+  setState,
+  setIsEmailValidStatus,
+}) {
   const [value, setValue] = useState("");
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
+  // const [isPasswordValid, setIsPasswordValid] = useState(false);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -15,6 +22,7 @@ export default function Input({ label, placeholder, type, Icon, setState }) {
     if (type === "email") {
       const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,})$/;
       setIsEmailValid(emailRegex.test(value));
+      setIsEmailValidStatus(emailRegex.test(value));
     }
   };
   return (

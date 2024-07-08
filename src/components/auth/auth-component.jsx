@@ -1,12 +1,61 @@
 import Button from "../ui/button";
-import UserInput from "./user-inputs";
+import Input from "../ui/input";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signInWithGithub, signInWithGoogle } from "../../lib/helpers";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { auth } from "../../config/firebase";
+import { toast } from "sonner";
 
 export default function AuthComponent() {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isEmailValidStatus, setIsEmailValidStatus] = useState(true);
+
+  useEffect(() => {
+    console.log(isEmailValidStatus);
+  }, [isEmailValidStatus]);
+
+  const createUser = async () => {
+    if (isEmailValidStatus) {
+      await createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          if (userCredential) {
+            console.log(userCredential);
+          }
+        })
+        .catch((err) => console.log(err.message));
+    }
+  };
+
+  const loginUser = async () => {
+    if (isEmailValidStatus) {
+      await signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          if (userCredential) {
+            console.log(userCredential);
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+          if (err.message.includes("invalid-credential")) {
+            toast.error("Invalid Credentials");
+          } else if (err.message.includes("missing-password")) {
+            toast.error("Please enter the password!");
+          } else if (err.message.includes("invalid-email")) {
+            toast.error("Invalid Email");
+          } else if (err.message.includes("user-not-found")) {
+            toast.error("Try after sometime");
+          }
+        });
+    }
+  };
+
   return (
     <div className="flex flex-col border p-6 rounded-lg border-zinc-800">
       <h4>Logo</h4>
@@ -14,13 +63,35 @@ export default function AuthComponent() {
         Welcome! Please give CodeSketch a try!
       </p>
 
-      <UserInput />
+      <div className="flex flex-col gap-y-4 mt-4">
+        <Input
+          label="Email"
+          placeholder="Email"
+          type="email"
+          setState={setEmail}
+          setIsEmailValidStatus={setIsEmailValidStatus}
+        />
+        <Input
+          label="Password"
+          placeholder="Password"
+          type="password"
+          setState={setPassword}
+        />
+      </div>
 
-      <Button
-        text={isLogin ? "Login" : "Create"}
-        customClass="bg-white text-black text-center text-sm my-5"
-      />
-
+      {isLogin ? (
+        <Button
+          action={loginUser}
+          text="Login"
+          customClass="bg-white text-black text-center text-sm my-5"
+        />
+      ) : (
+        <Button
+          action={createUser}
+          text="Create"
+          customClass="bg-white text-black text-center text-sm my-5"
+        />
+      )}
       <p className="text-zinc-500 text-xs text-center">or continue with</p>
 
       <div className="flex items-center justify-center w-full gap-x-3 my-1">
