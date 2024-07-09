@@ -3,13 +3,13 @@ import { HiChevronDoubleLeft } from "react-icons/hi";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
-import Auth from "./auth";
-import Projects from "./projects";
 import Button from "../components/ui/button";
+import { useSelector } from "react-redux";
 
 export default function Home() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const [user, setUser] = useState(false);
+  const user = useSelector((state) => state.user?.user);
+
   return (
     <div className="flex">
       <div
