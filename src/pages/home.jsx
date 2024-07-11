@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { GoSearch } from "react-icons/go";
 import Button from "../components/ui/button";
 import { useSelector } from "react-redux";
+import UserProfile from "../components/user-profile/user-profile";
 
 export default function Home() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -48,7 +49,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="w-full px-10">
         <div className="flex justify-start gap-x-4 px-4 md:px-12 py-4 md:py-6 items-center">
           {/* searchbar  */}
           <div className="flex items-center gap-x-4 bg-zinc-800 w-full px-4 py-2 rounded-md border border-zinc-800">
@@ -62,7 +63,7 @@ export default function Home() {
 
           {/* user avatar or login  */}
           {user ? (
-            <div> Avatar </div>
+            <UserProfile />
           ) : (
             <Link to={"/auth"}>
               <Button

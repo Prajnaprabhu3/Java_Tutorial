@@ -20,3 +20,7 @@ export const signInWithGithub = async () => {
     window.location.reload();
   });
 };
+
+export const signOut = async () => {
+  await auth.signOut().then(() => window.location.reload());
+};
