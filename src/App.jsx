@@ -43,7 +43,7 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-[#141417] min-h-screen text-white">
+    <div className="bg-white dark:bg-[#141417] h-screen text-white">
       <Toaster richColors />
 
       {isLoading ? (
