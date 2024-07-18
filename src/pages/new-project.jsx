@@ -33,11 +33,11 @@ export default function NewProject() {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col  items-start justify-start overflow-y-hidden">
+    <div className="w-full h-screen  items-start justify-start">
       {/* header  */}
-      <div>Header</div>
+      <div className="bg-green-200">Header</div>
 
-      <div className="mt-20">
+      <div>
         {/* horizontal pane  */}
         <SplitPane
           split="horizontal"

@@ -99,3 +99,11 @@
   .ͼo {
     background: #131417 !important;
   }
+
+  .SplitPane.horizontal{
+    top: 50px !important;
+  }
+
+  /* .CodeMirror{
+    padding-top: 10px;
+  } */
