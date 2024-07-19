@@ -53,7 +53,7 @@ export default function UserProfile() {
         {isMenuOpen && (
           <motion.div
             {...slideUpOut}
-            className="flex flex-col  justify-center bg-zinc-800 rounded px-2 py-3 absolute top-10 "
+            className="flex flex-col  justify-center bg-zinc-800 rounded px-2 py-3 absolute top-10 z-50"
           >
             {menuOptions.map((item) => (
               <Link

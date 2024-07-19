@@ -5,12 +5,26 @@ import { IoLogoJavascript } from "react-icons/io5";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { useRef } from "react";
+import Button from "../components/ui/button";
+import { useSelector } from "react-redux";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
+import { toast } from "sonner";
+import UserProfile from "../components/user-profile/user-profile";
 
 export default function NewProject() {
   const [htmlCode, setHtmlCode] = useState("");
   const [cssCode, setCssCode] = useState("");
   const [jsCode, setJSCode] = useState("");
   const [combinedCode, setCombinedCode] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const [title, setTitle] = useState("Untitled");
+  const inputRef = useRef(null);
+
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     outPut();
@@ -32,10 +46,93 @@ export default function NewProject() {
     setCombinedCode(combinedCode);
   };
 
+  function handleClickOutside(e) {
+    // @ts-ignore
+    if (inputRef.current && !inputRef.current.contains(e.target)) {
+      setIsEditing(false);
+    }
+  }
+
+  function handleOnEnter(e) {
+    if (e.key === "Enter") {
+      setIsEditing(false);
+    }
+  }
+
+  useEffect(() => {
+    if (isEditing) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  });
+
+  const saveProject = async () => {
+    const id = `${Date.now()}`;
+    const _doc = {
+      id: id,
+      title: title,
+      html: htmlCode,
+      css: cssCode,
+      js: jsCode,
+      output: combinedCode,
+      user: user,
+    };
+
+    await setDoc(doc(db, "Projects", id), _doc)
+      .then((res) => {
+        toast.success("Project Saved :)");
+      })
+      .catch((err) => toast.error(err.message));
+  };
+
   return (
     <div className="w-full h-screen  items-start justify-start">
       {/* header  */}
-      <div className="bg-green-200">Header</div>
+      <div className="flex items-center justify-between  py-2  w-full px-14">
+        <div className="flex gap-x-10">
+          <Link to={"/"}>CodeSketch</Link>
+
+          {/* title  */}
+          <div className="">
+            <AnimatePresence>
+              {isEditing ? (
+                <>
+                  <motion.input
+                    ref={inputRef}
+                    className=" bg-inherit outline-none"
+                    key="Project Title"
+                    type="text"
+                    onKeyDown={handleOnEnter}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </>
+              ) : (
+                <motion.p
+                  key="Project Title"
+                  onClick={() => setIsEditing(true)}
+                >
+                  {title}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-x-5">
+          {/* save  */}
+          <Button
+            text="Save"
+            action={saveProject}
+            customClass="bg-white text-sm text-black px-4 font-medium"
+          />
+          {/* avatar  */}
+          <UserProfile />
+        </div>
+      </div>
 
       <div>
         {/* horizontal pane  */}
